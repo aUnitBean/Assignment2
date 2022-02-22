@@ -5,8 +5,8 @@
 % the accuracy of the finite deffirence method can be evaluted.
 
 % rectangular region
-ny = 100; % length
-nx = 3*ny/2; % width
+nx = 100; % length
+ny = 100; % width
 
 % boundary conditions
 boundary_top = 0;
@@ -48,6 +48,7 @@ for i = 1:nx
             G(n,n) = 1;
             B(n) = boundary_top;
 
+
          else
             nxm = j + (i-2)*ny;
             nxp = j + (i)*ny;
@@ -55,20 +56,22 @@ for i = 1:nx
             nyp = j+1 + (i-1)*ny;
 
             G(n,n) = -4/d2 ;
-            G(n,nxm) = 1/d2;
-            G(n,nxp) = 1/d2;
-            G(n,nym) = 1/d2;
-            G(n,nyp) = 1/d2;
+            G(n,nxm) = 1/dx2;
+            G(n,nxp) = 1/dx2;
+            G(n,nym) = 1/dx2;
+            G(n,nyp) = 1/dx2;
+
 
         end
     end
+
 end
 
 figure('name', 'Matrix')
 spy(G)
 
-%Potential map
 V = G\B';
+
 Vmap = zeros(nx, ny);
 for i = 1:nx
     for j = 1:ny
@@ -78,3 +81,23 @@ for i = 1:nx
 end
 figure
 surf(Vmap');
+% 
+% nmodes = 9;
+% [E,D] = eigs(G, nmodes, 'SM');
+% figure('name', 'EigenValues')
+% plot (diag(D), '*');
+% 
+% np = ceil (sqrt(nmodes));
+% figure ('name','Modes')
+% for k = 1:nmodes
+%     M = E(:,k);
+%     for i = 1:nx
+%         for j = 1:ny
+%             n = i +(j-1)*nx;
+%             V(i,j) = M(n);
+%         end
+%         subplot(np,np,k), surf(V, 'linestyle','none')
+%         title(['EV = ' num2str(D(k,k))])
+%     end
+% end
+% 
