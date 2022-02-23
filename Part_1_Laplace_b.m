@@ -4,14 +4,15 @@
 % rectangular region using the analytical series solution. Following this, 
 % the accuracy of the finite deffirence method can be evaluted.
 
+function V = Part_1_Laplace_b(nX, nY, length, width)
 
 % rectangular region
 % number of points
-nx = 100;
-ny = nx; 
+nx = nX;
+ny = nY; 
 % dimensions
-l = 1; % length
-w = 3*l/2; % width
+l = length; % length
+w = width; % width
 
 % Variables for calculation of points
 x = linspace(-l, l, nx);
@@ -22,7 +23,7 @@ V0 = 1; % Boundary potential
 V = zeros(nx, ny); % Potential map
 
 % Number of iterations
-it = 100;
+it = 10;
 
 for i = 1 : nx
     for j = 1 : ny
@@ -38,16 +39,6 @@ end
 
 V = V * 4 * V0/pi; % Multiplied by constant for appropriate V0
 
-%Plot Dimensions
+end
 
-length_plot = linspace(0, l, nx);
-width_plot = linspace(0, w, ny);
-
-%Plot
-
-figure
-
-surf(length_plot, width_plot, V);
-colormap(hot);
-axis([0 l  0 w  0 1])
 

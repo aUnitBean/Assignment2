@@ -4,12 +4,13 @@
 % rectangular region using the finite difference method. Following this, 
 % the accuracy of the finite deffirence method can be evaluted.
 
+
+function Vmap = Part_1_Laplace_a(nX, nY)
+
 % rectangular region
-ny = 100;
-nx = ny; 
-% dimensions
-l = 1; % length
-w = 3*l/2; % width
+% number of points
+nx = nX;
+ny = nY; 
 
 % boundary conditions
 boundary_top = 0;
@@ -76,15 +77,16 @@ Vmap = zeros(nx, ny);
 for i = 1:nx
     for j = 1:ny
         n = j + (i - 1) * ny;
-        Vmap(j, i) = V(n);
+        Vmap(i, j) = V(n);
     end
 end
 
-%Plot Dimensions
-length_plot = linspace(0, l, nx);
-width_plot = linspace(0, w, ny);
-
-%Plot
-figure
-surf( length_plot, width_plot, Vmap');
-colormap winter;
+end
+% %Plot Dimensions
+% length_plot = linspace(0, l, nx);
+% width_plot = linspace(0, w, ny);
+% 
+% %Plot
+% figure
+% surf( length_plot, width_plot, Vmap');
+% colormap winter;

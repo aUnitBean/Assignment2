@@ -1,3 +1,8 @@
+%Sarah Dolan, ELEC 4700, February 2022
+%% Question 1 b)
+% The purpose of this code is solve for the electro static potential in a
+% rectangular region using the analytical series solution. Following this, 
+% the accuracy of the finite deffirence method can be evaluted.
 
 
 % rectangular region
@@ -31,13 +36,15 @@ for i = 1 : nx
     end
 end
 
-V = V * 4 * V0/pi  ;
+V = V * 4 * V0/pi; % Multiplied by constant for appropriate V0
 
 %Plot Dimensions
-
 length_plot = linspace(0, l, nx);
 width_plot = linspace(0, w, ny);
 
+%Plot
 figure
 surf(length_plot, width_plot, V);
+colormap(hot);
+axis([0 l  0 w  0 1])
 
