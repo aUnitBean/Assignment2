@@ -74,13 +74,12 @@ end
 %Potential map
 V = G\B';
 Vmap = zeros(nx, ny);
-for i = 1:nx
-    for j = 1:ny
-        n = j + (i - 1) * ny;
-        Vmap(i, j) = V(n);
+    for i = 1:nx
+        for j = 1:ny
+            n = j + (i - 1) * ny;
+            Vmap(i, j) = V(n);
+        end
     end
-end
-
 end
 % %Plot Dimensions
 % length_plot = linspace(0, l, nx);

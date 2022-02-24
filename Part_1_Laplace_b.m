@@ -23,7 +23,7 @@ V0 = 1; % Boundary potential
 V = zeros(nx, ny); % Potential map
 
 % Number of iterations
-it = 10;
+it = 100;
 
 for i = 1 : nx
     for j = 1 : ny
