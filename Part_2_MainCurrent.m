@@ -2,30 +2,30 @@
 %% Question 2
 % The purpose of this code is solve for the electro static current in a
 % rectangular region using the finite difference method. A "bottle-neck",
-% high density region is added.
+% high density region is added. The centre current through the bottle-neck
+% is returned.
 
-close all
-set(0, 'DefaultFigureWindowStyle', 'docked')
+function [current, mainCurrent] = Part_2_MainCurrent (nX, nY, sigmaBox, passage_Length, passage_Width)
 
 % Dimesions
-passageWidth = 10;
-passageLength = 20;
-nx = 80;
-ny = 50; 
-l = 1; % length
-w = 3*l/2; % width
+passageLength = passage_Length;
+passageWidth = passage_Width;
+nx = nX;
+ny = nY; 
+% l = 1; % length
+% w = 3*l/2; % width
 
 % Resistance Map
 sigma_out = 1;
-sigma_in = 10^-2;
+sigma_in = sigmaBox;
 
 cMap = (1/sigma_out) * ones(nx, ny);
 
 % Boundary conditions
-boundary_top = 0;
-boundary_bottom = 0;
+% boundary_top = 0;
+% boundary_bottom = 0;
 boundary_left = 1;
-boundary_right = 0;
+% boundary_right = 0;
 
 % distance between points
 d = 1;
@@ -33,7 +33,7 @@ d2 = d^2;
 
 %Boxes!
 num_boxes = 2;
-Boxes = {};
+Box = {};
 Box{1}.y =[1 1/2*(ny-passageWidth) ];
 Box{1}.x =[1/2*(nx-passageLength) 1/2*(nx+passageLength)];
 Box{2}.y =[1/2*(ny+passageWidth) ny];
@@ -148,76 +148,13 @@ Ex = -Ex;
 Ey = -Ey;
 
 % Current Solutions
-
 eFlowx = cMap .* Ex;
 eFlowy = cMap .* Ey;
 
-%--------------------------------------------------------------------------
-%Figures
-set(findall(gcf,'-property','FontSize'),'FontSize',12)
-
-%Impedance Plot
-surf(cMap');
-colormap(hot)
-title('\sigma Map','FontSize', 18);
-xlabel('x','FontSize', 12) 
-ylabel('y','FontSize', 12) 
-zlabel('\sigma (1/ \Omega)','FontSize', 12) 
-
-%Potential and Current Plots
-figure
-tiledlayout(2,1)
-ax1 = nexttile;
-surf(Vmap');
-shading interp;
-colormap(ax1,cool(20));
-title('Potential Map','FontSize', 12);
-xlabel('x','FontSize', 12) 
-ylabel('y','FontSize', 12) 
-zlabel('Potential (V)','FontSize', 12) 
-
-nexttile;
-quiver(eFlowx', eFlowy');
-hold on
-rectangle('Position',[Box{1}.x(1) Box{1}.y(1) (Box{1}.x(2)-Box{1}.x(1)) (Box{1}.y(2)-Box{1}.y(1)) ],'EdgeColor','b');
-hold on
-rectangle('Position',[Box{2}.x(1) Box{2}.y(1) (Box{2}.x(2)-Box{2}.x(1)) (Box{2}.y(2)-Box{2}.y(1)) ],'EdgeColor','b');
-title('Current Map','FontSize', 12);
-xlabel('x','FontSize', 12) 
-ylabel('y','FontSize', 12) 
-axis([0 nx 0 ny]);
-
-%Potential and Electric Field Plots
-figure
-tiledlayout(2,1)
-ax1b = nexttile;
-surf(Ex',Ey');
-title('Electric Field Map','FontSize', 12);
-xlabel('x','FontSize', 12) 
-ylabel('y','FontSize', 12) 
-zlabel('Electric Field (V/m)','FontSize', 12) 
-shading interp;
-colormap(ax1b,cool(20));
-
-nexttile;
-quiver(Ex', Ey');
-hold on
-rectangle('Position',[Box{1}.x(1) Box{1}.y(1) (Box{1}.x(2)-Box{1}.x(1)) (Box{1}.y(2)-Box{1}.y(1)) ],'EdgeColor','b');
-hold on
-rectangle('Position',[Box{2}.x(1) Box{2}.y(1) (Box{2}.x(2)-Box{2}.x(1)) (Box{2}.y(2)-Box{2}.y(1)) ],'EdgeColor','b');
-title('Electric Field Vectors','FontSize', 12);
-xlabel('x','FontSize', 12) 
-ylabel('y','FontSize', 12) 
-axis([0 nx 0 ny]);
-
+% Centre Current
 current = (eFlowx.^2+eFlowy.^2).^0.5;
-mainCurrent = current(nx/2,ny/2);
+mainCurrent = current(nx/2, ny/2);
 
-% figure
-% surf(cMap', current');
-% title('Current vs \sigma','FontSize', 12);
-% xlabel('x','FontSize', 12) 
-% ylabel('y','FontSize', 12) 
-
+end
 
 

@@ -4,12 +4,12 @@
 % rectangular region using the finite difference method. A "bottle-neck",
 % high density region is added.
 
+function mainCurrent = Part_2_Currents (nX, nY, length)
+
 close all
 set(0, 'DefaultFigureWindowStyle', 'docked')
 
 % Dimesions
-passageWidth = 10;
-passageLength = 20;
 nx = 80;
 ny = 50; 
 l = 1; % length
@@ -34,10 +34,10 @@ d2 = d^2;
 %Boxes!
 num_boxes = 2;
 Boxes = {};
-Box{1}.y =[1 1/2*(ny-passageWidth) ];
-Box{1}.x =[1/2*(nx-passageLength) 1/2*(nx+passageLength)];
-Box{2}.y =[1/2*(ny+passageWidth) ny];
-Box{2}.x =[1/2*(nx-passageLength) 1/2*(nx+passageLength)];
+Box{1}.y =[1 20];
+Box{1}.x =[30 50];
+Box{2}.y =[30 ny];
+Box{2}.x =[30 50];
 
 for n = 1:num_boxes
 cMap(Box{n}.x(1):Box{n}.x(2), Box{n}.y(1):Box{n}.y(2)) = (sigma_in);
@@ -153,13 +153,16 @@ eFlowx = cMap .* Ex;
 eFlowy = cMap .* Ey;
 
 %--------------------------------------------------------------------------
+
+
+
 %Figures
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 
 %Impedance Plot
 surf(cMap');
 colormap(hot)
-title('\sigma Map','FontSize', 18);
+title('Impedance Map','FontSize', 12);
 xlabel('x','FontSize', 12) 
 ylabel('y','FontSize', 12) 
 zlabel('\sigma (1/ \Omega)','FontSize', 12) 
@@ -210,14 +213,12 @@ xlabel('x','FontSize', 12)
 ylabel('y','FontSize', 12) 
 axis([0 nx 0 ny]);
 
+
 current = (eFlowx.^2+eFlowy.^2).^0.5;
 mainCurrent = current(nx/2,ny/2);
 
-% figure
-% surf(cMap', current');
-% title('Current vs \sigma','FontSize', 12);
-% xlabel('x','FontSize', 12) 
-% ylabel('y','FontSize', 12) 
-
+figure
+surf(cMap', current');
+end
 
 

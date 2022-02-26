@@ -21,23 +21,21 @@ y = linspace(0, w, ny);
 % Potential
 V0 = 1; % Boundary potential
 V = zeros(nx, ny); % Potential map
-
+  
 % Number of iterations
-it = 100;
-
-for i = 1 : nx
-    for j = 1 : ny
-         V_n = 0; % Potential summation reset to zero
-         n = 1; % Reset iteration counter
-        while n < 2*it
-            V_n = V_n + (1/n) * (cosh(n * pi * x(i) /w) / cosh(n * pi * (l)/w))*sin(n * pi * y(j)/ w); % Calculation of potential
-            n = n + 2;  % Odd integers only
+it = 75;
+n = 1; % Reset iteration counter
+while n < 2*it
+    for i = 1 : nx
+        for j = 1 : ny
+             V_n = V(i,j) + 4 * V0/pi*(1/n) * (cosh(n * pi * x(i) /w) / cosh(n * pi * (l)/w))*sin(n * pi * y(j)/ w); % Calculation of potential
+             V (i,j) = V_n; % Potential assigned for given potential on map
         end
-            V (i,j) = V_n; % Potential assigned for given potential on map
     end
+    surf(x,y, V);
+    pause(0.01);
+    n = n + 2;  % Odd integers only
 end
-
-V = V * 4 * V0/pi; % Multiplied by constant for appropriate V0
 
 end
 
