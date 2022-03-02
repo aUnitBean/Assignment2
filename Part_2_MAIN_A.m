@@ -4,18 +4,18 @@
 % rectangular region using the finite difference method. A "bottle-neck",
 % high density region is added.
 
-function mainCurrent = Part_2_Currents (nX, nY, length)
-
 close all
 set(0, 'DefaultFigureWindowStyle', 'docked')
 
 % Dimesions
+passageWidth = 10;
+passageLength = 20;
 nx = 80;
 ny = 50; 
 l = 1; % length
 w = 3*l/2; % width
 
-% Resistance Map
+% Sigma Map
 sigma_out = 1;
 sigma_in = 10^-2;
 
@@ -34,13 +34,13 @@ d2 = d^2;
 %Boxes!
 num_boxes = 2;
 Boxes = {};
-Box{1}.y =[1 20];
-Box{1}.x =[30 50];
-Box{2}.y =[30 ny];
-Box{2}.x =[30 50];
+Box{1}.y =[1 1/2*(ny-passageWidth) ];
+Box{1}.x =[1/2*(nx-passageLength) 1/2*(nx+passageLength)];
+Box{2}.y =[1/2*(ny+passageWidth) ny];
+Box{2}.x =[1/2*(nx-passageLength) 1/2*(nx+passageLength)];
 
 for n = 1:num_boxes
-cMap(Box{n}.x(1):Box{n}.x(2), Box{n}.y(1):Box{n}.y(2)) = (sigma_in);
+cMap(Box{n}.x(1):Box{n}.x(2), Box{n}.y(1):Box{n}.y(2)) = (sigma_in); %Box positions of cMap assigned the desired internal sigma
 end
 
 % Matrices
@@ -152,32 +152,41 @@ Ey = -Ey;
 eFlowx = cMap .* Ex;
 eFlowy = cMap .* Ey;
 
+current = (eFlowx.^2+eFlowy.^2).^0.5;
+mainCurrent = current(nx/2,ny/2)
+
 %--------------------------------------------------------------------------
-
-
-
 %Figures
 set(findall(gcf,'-property','FontSize'),'FontSize',12)
 
 %Impedance Plot
 surf(cMap');
 colormap(hot)
-title('Impedance Map','FontSize', 12);
+title('\sigma Map','FontSize', 18);
 xlabel('x','FontSize', 12) 
 ylabel('y','FontSize', 12) 
 zlabel('\sigma (1/ \Omega)','FontSize', 12) 
 
 %Potential and Current Plots
+
 figure
-tiledlayout(2,1)
-ax1 = nexttile;
 surf(Vmap');
 shading interp;
-colormap(ax1,cool(20));
 title('Potential Map','FontSize', 12);
 xlabel('x','FontSize', 12) 
 ylabel('y','FontSize', 12) 
 zlabel('Potential (V)','FontSize', 12) 
+
+figure
+tiledlayout(2,1)
+ax1 = nexttile;
+surf(current');
+shading interp;
+colormap(ax1,cool(20));
+title('Current Map','FontSize', 12);
+xlabel('x','FontSize', 12) 
+ylabel('y','FontSize', 12) 
+zlabel('Current (A)','FontSize', 12) 
 
 nexttile;
 quiver(eFlowx', eFlowy');
@@ -185,7 +194,7 @@ hold on
 rectangle('Position',[Box{1}.x(1) Box{1}.y(1) (Box{1}.x(2)-Box{1}.x(1)) (Box{1}.y(2)-Box{1}.y(1)) ],'EdgeColor','b');
 hold on
 rectangle('Position',[Box{2}.x(1) Box{2}.y(1) (Box{2}.x(2)-Box{2}.x(1)) (Box{2}.y(2)-Box{2}.y(1)) ],'EdgeColor','b');
-title('Current Map','FontSize', 12);
+title('Current Flow','FontSize', 12);
 xlabel('x','FontSize', 12) 
 ylabel('y','FontSize', 12) 
 axis([0 nx 0 ny]);
@@ -214,11 +223,12 @@ ylabel('y','FontSize', 12)
 axis([0 nx 0 ny]);
 
 
-current = (eFlowx.^2+eFlowy.^2).^0.5;
-mainCurrent = current(nx/2,ny/2);
 
-figure
-surf(cMap', current');
-end
+% figure
+% surf(cMap', current');
+% title('Current vs \sigma','FontSize', 12);
+% xlabel('x','FontSize', 12) 
+% ylabel('y','FontSize', 12) 
+
 
 
